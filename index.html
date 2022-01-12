@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Compactador de Imagem</title>
+    <link href="styles.css" rel="stylesheet" />
+  </head>
+  <body>
+    <input
+      name="files"
+      id="files"
+      type="file"
+      accept="image/*,"
+      onChange="handleOnChange()"
+    />
+    <label for="files">
+      <div>Selecionar Imagem</div>
+    </label>
+    <section>
+      <div class="frame">
+        <div class="title">
+          <h1>Original</h1>
+          <span id="infoOrigin">Nenhuma imagem selecionada</span>
+        </div>
+        <div class="image">
+          <img
+            id="origin"
+            alt="Aguardando imagem"
+            title="Esta será a imagem original"
+          />
+        </div>
+      </div>
+      <div class="frame">
+        <div class="title">
+          <h1>Redimensionada</h1>
+          <span id="infoNew">Nenhuma imagem selecionada</span>
+        </div>
+        <div class="image">
+          <img
+            id="newImage"
+            alt="Aguardando imagem"
+            title="Esta será a imagem final"
+          />
+        </div>
+      </div>
+    </section>
+  </body>
+  <script type="text/javascript" src="script.js"></script>
+</html>
