@@ -1,56 +1,68 @@
-var types = [
-    "image/jpg",
-    "image/jpeg",
-    "image/bmp",
-    "image/png"
+/*
+    Aqui definimos os tipos de imagens que serão aceitas
+*/
+const types = [
+    'image/jpg',
+    'image/jpeg',
+    'image/bmp',
+    'image/png'
 ]
 
-var infoAfter = document.getElementById("infoNew");
-var infoBefore = document.getElementById("infoOrigin");
+const infoAfter = document.getElementById('infoNew');
+const infoBefore = document.getElementById('infoOrigin');
 
-//aqui é onde definimos as dimensões máximas da nova imagem
-var MAX_WIDTH = 640;
-var MAX_HEIGHT = 640;
+/*
+    Aqui definimos as dimensões máximas da nova imagem
+*/
+const MAX_WIDTH = 640;
+const MAX_HEIGHT = 640;
 
-//aqui personalizamos o que queremos fazer com a imagem convertida
+/*
+    Aqui definimos o que será feito com a imagem passada como parâmetro
+*/
 const callback = (image, id) => {
-    //pegando o endereço temporário da nova imagem
+    //Recuperando o endereço temporário da imagem
     const src = URL.createObjectURL(image);
-    //criando a variável para setar a nova imagem e exibir para o usuário
+    //Definindo uma variável para setar a imagem e exibir para o usuário
     const preview = document.getElementById(id);
-    //setando o caminho da imagem redimensionada na imagem que será exibida para o usuário
+    //Atribuindo o caminho da imagem ao src
     preview.src = src;
+    //Exibindo para o usuário o tamanho dos arquivos
     id === "origin" ? infoBefore.innerHTML = `${image.name} - ${(image.size / 1024 / 1024).toFixed(2)} Mb` : infoAfter.innerHTML = `${image.name} - ${(image.size / 1024 / 1024).toFixed(2)} Mb`;
 };
 
-//Função chamada após a seleção da imagem
+/*
+    Função chamada após a seleção da imagem
+*/
 function handleOnChange() {
-    //criamos uma variável com os arquivos selecionados do input
-    const files = document.getElementById("files").files;
-    //verificamos se foi selecionado algum arquivo e fazemos um return caso negativo
+    //Definimos uma variável com os arquivos selecionados do input
+    const files = document.getElementById('files').files;
+    //Validamos se foi selecionado ao menos e apenas um arquivo e se o tipo de arquivo não está entre os pré-definidos na nossa configuração
     if (files.lentgh === 0) {
-        alert("Não foram selecionadas imagens.");
+        alert('Não foram selecionadas imagens.');
         return;
     } else if (files.lentgh > 1) {
-        alert("Permitido apenas uma compactação por vez.");
+        alert('Permitido apenas uma compactação por vez.');
         return;
     } else if (!types.includes(files[0].type.toString())) {
-        console.log(files[0].type);
-        alert("Extensão não permitida.");
+        alert('Tipo de arquivo não permitido. Os tipos aceitos são JPG, JPEG, BMP, PNG');
         return;
     }
-    callback(files[0], "origin");
+    callback(files[0], 'origin');
     resize(files[0]);
 };
 
+/*
+    Função que realiza o redimensionamento da imagem
+*/
 function resize(image) {
-    //criamos img que será a nossa nova imagem
+    //Definimos a variável que será a nova imagem
     const img = new Image();
-    //criamos um reader para ler a nossa imagem
+    //Definimos um READER para fazer a leitura da nova imagem
     const reader = new FileReader();
-    //salvamos uma função de callback que será chamada quando o canvas converter o arquivo para blob
-    const createFileFromBlob = blob => {
-        //criamos um file com o blob passando o nome da imagem, o tipo e a ultima modificação
+    //Definimos uma função de callback que será chamada quando o canvas converter o arquivo para blob
+    const createFileFromBlob = (blob) => {
+        //Definimos um FILE(arquivo) com o blob passando o nome, o tipo e a ultima modificação da imagem recebida no parâmetro da função
         const imageResized = new File(
             [blob],
             image.name,
@@ -59,18 +71,19 @@ function resize(image) {
                 lastModified: Date.now()
             }
         );
-        //Chamando a função definida no inicio, que será a função para utilizar a foto compactada
-        callback(imageResized, "newImage");
+        //Nesse ponto finalizamos a conversão da imagem
+        callback(imageResized, 'newImage');
     };
 
-    //vamos escrever o método do onload do reader porque ele é chamado no momento em que é finalizado a carregamento da imagem
-    reader.onload = e => {
+    //Sobrescrevemos o método onload do reader, e definimos o que deve ser feito após finalizar a leitura
+    reader.onload = (e) => {
+        //Trabalhando com a imagem criada no inicio dessa função
         img.src = e.target.result;
-        //quando a imagem fora carregada após receber o a linha superior
+        //Sobrescrevemos o método onload da imagem, e definimos o que deve ser feito após finalizar o carregamento
         img.onload = () => {
-            //criamos um canvas
-            const canvas = document.createElement("canvas");
-            //fazemos calculos para saber qual lado é maior e reduzir na propoção certa
+            //Criamos um canvas
+            const canvas = document.createElement('canvas');
+            //Lógica para saber qual lado é maior e reduzir na propoção correta
             let width = img.width;
             let height = img.height;
             if (width > height) {
@@ -84,21 +97,23 @@ function resize(image) {
                     height = MAX_HEIGHT;
                 }
             }
-            //definimos tamanho do canvas com as dimensões reduzidas
+            //Definimos as dimensões do canvas de acordo com os calculos acima
             canvas.width = width;
             canvas.height = height;
-            //pegamos o contexto do canvas
-            let ctx = canvas.getContext("2d");
-            //desenhamos a nova imagem passando a imagem, a posição de inicio e o tamanho
+            //Criamos uma variável com o contexto do canvas
+            const ctx = canvas.getContext("2d");
+            //Desenhamos no canvas a nova imagem, definindo a posição de inicio(x,y) e as dimensões
             ctx.drawImage(img, 0, 0, width, height);
-            //aqui é onde a magia acontece,
-            //primeiro convertemos a imagem desenhada pelo canvas para o formato Blob
-            //o primeiro parametro é a função de callback que ele irá chamar após converter
-            //o segundo o type da imagem
-            //e o terceiro é a qualidade variando de 0 a 1
-            ctx.canvas.toBlob(createFileFromBlob, image.type, 0.8);
+            /*
+                Aqui é onde a magia acontece
+                Primeiro convertemos a imagem desenhada pelo canvas para o formato Blob
+                O primeiro parametro é a função de callback que ele irá chamar após converter
+                O segundo o tipo(extensão) da imagem
+                O terceiro é a qualidade variando de 0 a 1
+            */
+            ctx.canvas.toBlob(createFileFromBlob, image.type, 1);
         };
     };
-    //aqui lemos a imagem
+    //Após a definição do que deve ser feito com a image, lemos a imagem
     reader.readAsDataURL(image);
 }
