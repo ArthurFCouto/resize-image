@@ -1,15 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400&family=Montserrat:wght@400&family=Poppins:wght@400&family=Roboto:wght@400&display=swap');
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
-html,
-body {
+
+html, body {
   height: 100%;
 }
+
 #files {
   display: none;
 }
+
 label[for="files"] div {
   background-color: #ffffff;
   cursor: pointer;
@@ -18,18 +22,21 @@ label[for="files"] div {
   border-radius: 50px;
   transition: all 0.2s;
 }
+
 label[for="files"] div:hover {
   background-color: #f0fdf3;
   box-shadow: 0 0 10px 3px #bdbdbd;
 }
+
 body {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  display: flex;
+  font-family: Lato, Poppins, Roboto, sans-serif;
   background-color: #f8f5f0;
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
+
 section {
   height: 400px;
   width: 100%;
@@ -39,6 +46,7 @@ section {
   align-items: center;
   justify-content: space-around;
 }
+
 .frame {
   cursor: default;
   width: 100%;
@@ -49,6 +57,7 @@ section {
   border-radius: 10px;
   box-shadow: 0 0 10px -3px #333333;
 }
+
 .image {
   width: 100%;
   max-width: 380px;
@@ -56,18 +65,21 @@ section {
   max-height: 270px;
   display: flex;
 }
+
 .image img {
-  cursor: pointer;
+  cursor: default;
   max-width: 100%;
   max-height: 100%;
   margin: auto;
 }
+
 .title {
   height: 60px;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
+
 .title span {
   line-height: 16px;
   font-size: 12px;
